@@ -54,13 +54,11 @@ public class UnZipUtils {
                 ZipEntry entry = entries.nextElement();
                 name = entry.getName();
                 // 有正则就筛选，没有就全部
-                if (exclusion != null && exclusion.matcher(name).find()) {
-                    continue;
+                boolean isNotExclusion = exclusion == null || !exclusion.matcher(name).find();
+                boolean isInclusion = inclusion == null || inclusion.matcher(name).find();
+                if (isNotExclusion && isInclusion) {
+                    unZipEntry(list, zipFile, entry, outPath);
                 }
-                if (inclusion != null && !inclusion.matcher(name).find()) {
-                    continue;
-                }
-                unZipEntry(list, zipFile, entry, outPath);
             }
         } catch (IOException e) {
             String path = PathUtils.canonicalPath(inFile);
