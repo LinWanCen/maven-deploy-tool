@@ -10,4 +10,6 @@ public class Suffix {
     public static final String JAR = ".jar";
     public static final String SRC = "-sources.jar";
     public static final String DOC = "-javadoc.jar";
+
+    private Suffix() {}
 }
