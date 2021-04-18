@@ -50,7 +50,9 @@ public class CmdUtils {
         if (workingDirectory != null) {
             executor.setWorkingDirectory(workingDirectory);
         }
-        LOG.debug("workdir: {}", executor.getWorkingDirectory().getAbsolutePath());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("workdir: {}", executor.getWorkingDirectory().getAbsolutePath());
+        }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ByteArrayOutputStream err = new ByteArrayOutputStream();
@@ -85,22 +87,20 @@ public class CmdUtils {
             LOG.trace("exec out out:\n{}", out);
             if (logFile != null) {
                 Path path = logFile.toPath();
-                PathUtils.mkdirParent(logFile);
+                PathUtils.mkdir(logFile.getParentFile());
                 Files.write(path, commandLineBytes);
                 Files.write(path, err.toByteArray(), StandardOpenOption.APPEND);
                 Files.write(path, "\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
                 Files.write(path, out.toByteArray(), StandardOpenOption.APPEND);
             }
         } catch (IOException e) {
-            LOG.error("write logFile IOException file:///{}", PathUtils.canonicalPath(logFile), e);
+            String path = PathUtils.canonicalPath(logFile);
+            LOG.error("write logFile IOException file:///{}", path, e);
         }
 
-        // 异常的情况下才检查
-        if (exitCode != 0) {
-            // 超时进程被看门狗杀死
-            if (executor.getWatchdog().killedProcess()) {
-                LOG.error("execute timeout: {}, cmd: {}", timeout, cmd);
-            }
+        // 异常的情况下才检查 超时进程被看门狗杀死
+        if (exitCode != 0 && executor.getWatchdog().killedProcess()) {
+            LOG.error("execute timeout: {}, cmd: {}", timeout, cmd);
         }
         return exitCode;
     }

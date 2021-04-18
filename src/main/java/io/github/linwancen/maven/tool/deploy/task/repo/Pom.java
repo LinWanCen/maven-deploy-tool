@@ -6,7 +6,6 @@ class Pom {
     public final String version;
     public final String packaging;
     public final String classifier;
-    public final Pom parent;
 
     Pom(String groupId, String artifactId, String version, String packaging, String classifier) {
         this.groupId = groupId;
@@ -14,7 +13,6 @@ class Pom {
         this.version = version;
         this.packaging = packaging == null ? "jar" : packaging;
         this.classifier = classifier;
-        this.parent = null;
     }
 
     Pom(Pom parent, String groupId, String artifactId, String version, String packaging, String classifier) {
@@ -23,6 +21,17 @@ class Pom {
         this.version = version == null ? parent.version : version;
         this.packaging = packaging == null ? "jar" : packaging;
         this.classifier = classifier;
-        this.parent = parent;
+    }
+
+    /**
+     * <br/>groupId:artifactId:version:packaging:classifier
+     */
+    @Override
+    public String toString() {
+        return (groupId == null ? "" : groupId) + ":" +
+                (artifactId == null ? "" : artifactId) + ":" +
+                (version == null ? "" : version) + ":" +
+                packaging + ":" +
+                (classifier == null ? "" : classifier);
     }
 }

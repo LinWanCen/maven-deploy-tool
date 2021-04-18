@@ -12,14 +12,19 @@ import java.nio.file.Files;
 public class JStackUtils {
 
     public static final String PID_AND_NAME = ManagementFactory.getRuntimeMXBean().getName();
+
     @SuppressWarnings("SpellCheckingInspection")
     public static final File SCRIPT_FILE = new File("jstack.sh");
+
     public static final String SCRIPT_FILE_CANONICAL_PATH = PathUtils.canonicalPath(SCRIPT_FILE);
-    private static final Logger LOG = LoggerFactory.getLogger(JStackUtils.class);
+
     @SuppressWarnings("SpellCheckingInspection")
-    public static String JSTACK = "jstack";
+    public static final String JSTACK = "jstack";
+
     @SuppressWarnings("SpellCheckingInspection")
     public static final String CMD = JSTACK + " -l " + PID_AND_NAME + " >> jstack.log";
+
+    private static final Logger LOG = LoggerFactory.getLogger(JStackUtils.class);
 
     private JStackUtils() {}
 

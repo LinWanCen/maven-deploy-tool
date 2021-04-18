@@ -1,5 +1,6 @@
 package io.github.linwancen.maven.tool;
 
+import io.github.linwancen.util.ConfUtils;
 import io.github.linwancen.util.EnvUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ public class Main {
     private Main() {}
 
     public static void main(String[] args) {
+        Conf.prop = ConfUtils.loadUtf8(Conf.CONF_PATH);
         String deployDir = EnvUtils.get("deployDir", Conf.prop);
         if (deployDir != null) {
             File file = new File(deployDir);

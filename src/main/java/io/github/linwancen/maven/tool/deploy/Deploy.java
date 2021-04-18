@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -21,7 +20,7 @@ public class Deploy {
 
     private Deploy() {}
 
-    public static void run(LinkedHashMap<String, StringBuilder> paramMap, File deployDir) {
+    public static void run(Map<String, StringBuilder> paramMap, File deployDir) {
         int size = paramMap.size();
         String deployPath = PathUtils.canonicalPath(deployDir);
         LOG.info("begin deploy:{} file:///{}", size, deployPath);
@@ -54,7 +53,8 @@ public class Deploy {
                 String k = entry.getKey();
                 File successFile = new File(k + Suffix.DEPLOY + FlagFileUtils.SUCC_SUFFIX);
                 if (successFile.exists()) {
-                    LOG.info("end-deploy skip success\t{}\tfile:///{}", tip, PathUtils.dirSpaceName(k));
+                    String dirSpaceName = PathUtils.dirSpaceName(k);
+                    LOG.info("end-deploy skip success\t{}\tfile:///{}", tip, dirSpaceName);
                     count.countDown();
                     continue;
                 }
@@ -81,6 +81,7 @@ public class Deploy {
             LOG.info("end deploy:{} file:///{}", size, deployPath);
         } catch (InterruptedException e) {
             LOG.error("count.await exception.", e);
+            Thread.currentThread().interrupt();
         }
     }
 

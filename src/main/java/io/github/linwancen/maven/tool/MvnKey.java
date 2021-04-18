@@ -6,10 +6,14 @@ public class MvnKey {
     public static final String ARTIFACT_ID = " -D artifactId=";
     public static final String VERSION = " -D version=";
     public static final String PACKAGING = " -D packaging=";
+    // 未来 GavFromPath 支持 classifier 用
+    @SuppressWarnings("unused")
+    public static final String CLASSIFIER = " -D classifier=";
+
     public static final String SETTINGS = " -s";
-    // public static final String CLASSIFIER = " -D classifier=";
     public static final String URL = " -D url=";
     public static final String REPOSITORY_ID = " -D repositoryId=";
+
     public static final String JAR_PACKAGING_FILE = PACKAGING + "jar -D file=";
     public static final String POM_PACKAGING_FILE = PACKAGING + "pom -D file=";
     public static final String SRC = " -D sources=";

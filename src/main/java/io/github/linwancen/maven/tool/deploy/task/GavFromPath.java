@@ -22,8 +22,8 @@ class GavFromPath {
     static boolean split(String tip, String k, StringBuilder v,
                          int deployDirLen,
                          boolean skipRepoHave, int cmdTimeout) {
-        LOG.warn("not found pom in jar, get pom from path, would lost dependencies\t{}\tfile:///{}",
-                tip, PathUtils.dirSpaceName(k));
+        String dirSpaceName = PathUtils.dirSpaceName(k);
+        LOG.warn("not found pom in jar, get pom from path, would lost dependencies\t{}\tfile:///{}", tip, dirSpaceName);
         String version;
         String artifactId;
         String groupId;
@@ -54,7 +54,7 @@ class GavFromPath {
 
             groupId = gaPath.substring(1, gaIndex).replace('/', '.');
         } catch (Exception e) {
-            LOG.info("getGavFromPath Exception \t{}\tfile:///{}.pom", tip, PathUtils.dirSpaceName(k), e);
+            LOG.info("getGavFromPath Exception \t{}\tfile:///{}.pom", tip, dirSpaceName, e);
             return false;
         }
         LOG.warn("getGavFromPath: {}:{}:{}", groupId, artifactId, version);

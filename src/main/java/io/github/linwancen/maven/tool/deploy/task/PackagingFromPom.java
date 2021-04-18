@@ -29,14 +29,16 @@ class PackagingFromPom {
                 }
             }
         } catch (IOException e) {
-            LOG.warn("getPackagingFromPom IOException \t{}\tfile:///{}", tip, PathUtils.canonicalPath(pomFile), e);
+            String path = PathUtils.canonicalPath(pomFile);
+            LOG.warn("getPackagingFromPom IOException \t{}\tfile:///{}", tip, path, e);
             return false;
         }
+        String dirSpaceName = PathUtils.dirSpaceName(k);
         if (!havePackaging) {
-            LOG.error("not found jar, packaging is not pom\t{}\tfile:///{}", tip, PathUtils.dirSpaceName(k));
+            LOG.error("not found jar, packaging is not pom\t{}\tfile:///{}", tip, dirSpaceName);
             return false;
         }
-        LOG.info("not found jar, set packaging=pom\t{}\tfile:///{}.pom", tip, PathUtils.dirSpaceName(k));
+        LOG.info("not found jar, set packaging=pom\t{}\tfile:///{}.pom", tip, dirSpaceName);
         v.append(MvnKey.POM_PACKAGING_FILE).append(k).append(Suffix.POM);
         return true;
     }

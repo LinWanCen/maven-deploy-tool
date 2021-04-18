@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Scan {
 
@@ -18,7 +18,7 @@ public class Scan {
 
     private Scan() {}
 
-    public static void run(LinkedHashMap<String, StringBuilder> paramMap, File... files) {
+    public static void run(Map<String, StringBuilder> paramMap, File... files) {
         // 在方法中获取而不是成员变量中获取以便支持重设
         Double calculate = JsUtils.calculate(EnvUtils.get("skipSize", Conf.prop));
         int skipSize;
@@ -31,7 +31,7 @@ public class Scan {
         recursion(skipSize, paramMap, files);
     }
 
-    public static void recursion(int skipSize, LinkedHashMap<String, StringBuilder> paramMap, File... files) {
+    public static void recursion(int skipSize, Map<String, StringBuilder> paramMap, File... files) {
         if (files == null) {
             return;
         }

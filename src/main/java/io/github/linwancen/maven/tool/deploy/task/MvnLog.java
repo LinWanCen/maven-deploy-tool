@@ -28,7 +28,8 @@ class MvnLog {
             }
             return line;
         } catch (IOException e) {
-            LOG.warn("read failLog IOException file:{}", PathUtils.canonicalPath(logFile), e);
+            String path = PathUtils.canonicalPath(logFile);
+            LOG.warn("read failLog IOException file:{}", path, e);
             return null;
         }
     }

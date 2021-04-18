@@ -17,6 +17,7 @@ public class JsUtilsTest {
         String express = "1_024 * 1024 * 50";
         Double calculate = JsUtils.calculate(express);
         assertNotNull(calculate);
-        LOG.info("{} = {}", express, BigDecimal.valueOf(calculate).toPlainString());
+        String s = BigDecimal.valueOf(calculate).toPlainString();
+        LOG.info("{} = {}", express, s);
     }
 }

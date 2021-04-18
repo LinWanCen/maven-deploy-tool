@@ -19,8 +19,7 @@ public class PathUtils {
             return file.getCanonicalPath().replace('\\', '/');
         } catch (IOException e) {
             String path = file.getAbsolutePath().replace('\\', '/');
-            LOG.warn("getCanonicalPath IOException {}\n  use AbsolutePath file:///{}",
-                    e.getLocalizedMessage(), path, e);
+            LOG.warn("getCanonicalPath IOException, use AbsolutePath file:///{}", path, e);
             return path;
         }
     }
@@ -28,12 +27,10 @@ public class PathUtils {
     /**
      * 避免没有文件夹报错
      */
-    public static void mkdirParent(File file) {
-        File parentFile = file.getParentFile();
-        if (parentFile != null) {
-            if (!parentFile.exists() && parentFile.mkdirs()) {
-                LOG.debug("mkdirs fail, file:///{}", PathUtils.canonicalPath(parentFile));
-            }
+    public static void mkdir(File dir) {
+        if (dir != null && !dir.exists() && dir.mkdirs()) {
+            String path = PathUtils.canonicalPath(dir);
+            LOG.debug("mkdir fail, file:///{}", path);
         }
     }
 

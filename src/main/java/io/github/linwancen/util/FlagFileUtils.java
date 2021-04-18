@@ -5,18 +5,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class FlagFileUtils {
 
     @SuppressWarnings("SpellCheckingInspection")
     public static final String SUCC_SUFFIX = ".succ";
-    public static final String LOCK_SUFFIX = ".lock";
     public static final String FAIL_SUFFIX = ".fail";
-    public static final String[] SUFFIXES = {
-            SUCC_SUFFIX,
-            LOCK_SUFFIX,
-            FAIL_SUFFIX,
-    };
     private static final Logger LOG = LoggerFactory.getLogger(FlagFileUtils.class);
 
     private FlagFileUtils() {}
@@ -41,9 +36,11 @@ public class FlagFileUtils {
 
     public static void deleteFile(File file) {
         if (file.exists()) {
-            if (!file.delete()) {
+            try {
+                Files.delete(file.toPath());
+            } catch (IOException e) {
                 String dirSpaceName = PathUtils.dirSpaceName(PathUtils.canonicalPath(file));
-                LOG.warn("have not delete file:///{}", dirSpaceName);
+                LOG.warn("Files.delete IOException file:///{}", dirSpaceName, e);
             }
         }
     }

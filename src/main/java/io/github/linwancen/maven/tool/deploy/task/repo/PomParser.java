@@ -19,9 +19,12 @@ class PomParser {
         SAXReader reader = new SAXReader();
         Document document;
         try {
+            // 避免 XXE attacks
+            reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             document = reader.read(pomFile);
         } catch (Exception e) {
-            LOG.error("parse pom.xml Exception file:///{}", PathUtils.canonicalPath(pomFile), e);
+            String path = PathUtils.canonicalPath(pomFile);
+            LOG.error("parse pom.xml Exception file:///{}", path, e);
             return null;
         }
         return parse(document);

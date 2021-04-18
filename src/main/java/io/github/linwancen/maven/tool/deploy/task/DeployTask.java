@@ -32,9 +32,9 @@ public class DeployTask implements Runnable {
         try {
             String pathPrefix = entry.getKey() + Suffix.DEPLOY;
             if (deploy()) {
-                FlagFileUtils.update(pathPrefix, FlagFileUtils.SUCC_SUFFIX, FlagFileUtils.SUFFIXES);
+                FlagFileUtils.update(pathPrefix, FlagFileUtils.SUCC_SUFFIX, FlagFileUtils.FAIL_SUFFIX);
             } else {
-                FlagFileUtils.update(pathPrefix, FlagFileUtils.FAIL_SUFFIX, FlagFileUtils.SUFFIXES);
+                FlagFileUtils.update(pathPrefix, FlagFileUtils.FAIL_SUFFIX, FlagFileUtils.SUCC_SUFFIX);
             }
         } finally {
             // 在 finally 中 countDown 避免异常等情况导致没有执行而卡住主线程

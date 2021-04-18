@@ -9,6 +9,8 @@ public class CmdPrefix {
     @SuppressWarnings("ConstantConditions")
     private static final String CLASS_PATH = ClassLoader.getSystemClassLoader().getResource("").getPath();
 
+    private CmdPrefix() {}
+
     static String get() {
         StringBuilder cmdBuilder = new StringBuilder(EnvUtils.get("cmdPrefix", Conf.prop));
         String userSettings = EnvUtils.get("userSettings", Conf.prop);
