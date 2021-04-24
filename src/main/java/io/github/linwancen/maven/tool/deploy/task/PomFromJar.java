@@ -63,6 +63,8 @@ public class PomFromJar {
         String pomPath = k + Suffix.POM;
         if (!pomFile.renameTo(new File(pomPath))) {
             LOG.warn("move pom fail\t{}\tfile:///{}", tip, dirSpaceName);
+            // 避免移动失败后报找不到文件异常
+            return;
         }
         v.append(MvnKey.POM_FILE).append(pomPath);
     }
