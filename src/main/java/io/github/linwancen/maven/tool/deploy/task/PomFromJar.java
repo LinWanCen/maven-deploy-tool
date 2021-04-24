@@ -20,8 +20,12 @@ public class PomFromJar {
     static void unzip(String tip, String k, StringBuilder v) {
         LOG.debug("not found pom, get pom in jar\t{}\tfile:///{}.jar", tip, k);
         File file = new File(k + Suffix.JAR);
+        // 避免 jar 在同一个目录的情况下相互覆盖并导致其他的移动失败
+        // 解压的时候会创建文件夹这里就不创建了
+        File dir = new File(k);
+        PathUtils.mkdir(dir);
         // 解压 jar 里的所有 pom 文件
-        List<File> list = UnZipUtils.unZip(file, file.getParentFile(),
+        List<File> list = UnZipUtils.unZip(file, dir,
                 Pattern.compile("pom.xml"), null);
         if (list == null || list.isEmpty()) {
             LOG.debug("not found pom in jar\t{}\tfile:///{}.jar", tip, k);
