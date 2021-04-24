@@ -33,7 +33,7 @@ public class Deploy {
         final boolean skipRepoHave = "true".equals(EnvUtils.get("skipRepoHave", Conf.prop));
         final boolean notUpdatingSuccess = "true".equals(EnvUtils.get("notUpdatingSuccess", Conf.prop));
 
-        final int threadMultiplier = Integer.parseInt(EnvUtils.get("threadMultiplier", Conf.prop));
+        final double threadMultiplier = Double.parseDouble(EnvUtils.get("threadMultiplier", Conf.prop));
         final int cmdTimeout;
         Double calculate = JsUtils.calculate(EnvUtils.get("cmdTimeout", Conf.prop).replace("_", ""));
         if (calculate == null) {
@@ -75,7 +75,7 @@ public class Deploy {
             task.getGavFromPath = getGavFromPath;
             task.skipRepoHave = skipRepoHave;
             task.notUpdatingSuccess = notUpdatingSuccess;
-            ThreadsPools.get("run-cmd-%d", threadMultiplier).execute(task);
+            ThreadsPools.get("deploy-%d", threadMultiplier).execute(task);
         }
         try {
             count.await();

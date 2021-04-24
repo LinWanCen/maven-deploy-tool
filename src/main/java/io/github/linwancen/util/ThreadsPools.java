@@ -19,7 +19,7 @@ public class ThreadsPools {
      * 获取指定名字和核心倍数的定时线程池
      * <br/>ThreadsPools.get("name-%d", 4).execute(new Runnable() {})
      */
-    public static ScheduledExecutorService get(String namingPattern, int threadMultiplier) {
+    public static ScheduledExecutorService get(String namingPattern, double threadMultiplier) {
         ScheduledExecutorService executor = poolMap.get(namingPattern);
         if (executor != null) {
             return executor;
@@ -30,7 +30,7 @@ public class ThreadsPools {
                 .build();
         // availableProcessors() 该值在特定的虚拟机调用期间可能发生更改。
         // 因此，对可用处理器数目很敏感的应用程序应该不定期地轮询该属性，并相应地调整其资源用法。
-        int corePoolSize = Runtime.getRuntime().availableProcessors() * threadMultiplier;
+        int corePoolSize = (int) (Runtime.getRuntime().availableProcessors() * threadMultiplier);
         executor = new ScheduledThreadPoolExecutor(corePoolSize, threadFactory);
         poolMap.put(namingPattern, executor);
         // 虽然 JStackUtils.CMD 在当前进程固定，但是在没用到线程池时就不打印，打印是为了方便排查卡住原因

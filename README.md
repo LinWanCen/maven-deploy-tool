@@ -48,7 +48,7 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
 - 上传到远程日志写入包目录`.deploy.log`
 
 
-* (可设置) 根据 CPU 核心数多线程运行
+* (可设置) 根据 CPU 核心数的倍数多线程运行 (支持小数)
 * (可设置) 命令行超时时间避免进程卡住 (支持算数和下划线)
 * 自动生成 jstack 脚本便于检查性能问题
 
