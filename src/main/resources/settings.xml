@@ -2,6 +2,7 @@
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" 
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <!-- 开启 setting.xml 时用空目录避免本地存在误判为远程存在 -->
   <localRepository>D:\MAVEN_REPO\public</localRepository>
 
   <pluginGroups>
@@ -9,9 +10,6 @@
     <pluginGroup>org.codehaus.mojo</pluginGroup>
     <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
   </pluginGroups>
-
-  <proxies>
-  </proxies>
 
   <servers>
     <server>
@@ -29,17 +27,5 @@
       <url>https://maven.aliyun.com/repository/public</url>
     </mirror>
   </mirrors>
-
-  <profiles>
-    <profile>
-      <id>sonar</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <sonar.host.url>http://localhost:9000</sonar.host.url>
-      </properties>
-    </profile>
-  </profiles>
 
 </settings>

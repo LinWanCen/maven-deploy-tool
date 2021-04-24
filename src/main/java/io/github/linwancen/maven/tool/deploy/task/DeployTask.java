@@ -8,6 +8,7 @@ import io.github.linwancen.util.FlagFileUtils;
 import io.github.linwancen.util.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.File;
 import java.util.Map;
@@ -15,13 +16,15 @@ import java.util.concurrent.CountDownLatch;
 
 public class DeployTask implements Runnable {
 
+    public static final String MDC_KEY_PROGRESS = "progress";
+
     private static final Logger LOG = LoggerFactory.getLogger(DeployTask.class);
 
     public CountDownLatch count;
     public Map.Entry<String, StringBuilder> entry;
     public int deployDirLen;
     public int cmdTimeout;
-    public String tip;
+    public String progress;
     public String cmdDeploy;
     public String cmdGet;
     public boolean getGavFromPath;
@@ -30,7 +33,7 @@ public class DeployTask implements Runnable {
 
     @Override
     public void run() {
-        try {
+        try (MDC.MDCCloseable ignored = MDC.putCloseable(MDC_KEY_PROGRESS, progress)) {
             String pathPrefix = entry.getKey() + Suffix.DEPLOY;
             if (deploy()) {
                 FlagFileUtils.update(pathPrefix, FlagFileUtils.SUCC_SUFFIX, FlagFileUtils.FAIL_SUFFIX);
@@ -53,27 +56,27 @@ public class DeployTask implements Runnable {
             // 如果没有 jar 文件直接报错跳过
             if (!cmd.contains(MvnKey.JAR_PACKAGING_FILE)) {
                 String dirSpaceName = PathUtils.dirSpaceName(k);
-                LOG.error("have no pom and jar\t{}\tfile:///{}", tip, dirSpaceName);
+                LOG.error("have no pom and jar\tfile:///{}", dirSpaceName);
                 return false;
             }
-            PomFromJar.unzip(tip, k, v);
+            PomFromJar.unzip(k, v);
             cmd = v.toString();
         }
         // 没有 jar 文件就在路径中获取 groupId artifactId version 并生成 pom
         if (!cmd.contains(MvnKey.POM_FILE)) {
             if (!getGavFromPath) {
                 String dirSpaceName = PathUtils.dirSpaceName(k);
-                LOG.error("have no pom and getPomFromJar fail\t{}\tfile:///{}", tip, dirSpaceName);
+                LOG.error("have no pom and getPomFromJar fail\tfile:///{}", dirSpaceName);
                 return false;
             }
-            if (!GavFromPath.split(tip, k, v, deployDirLen,
+            if (!GavFromPath.split(k, v, deployDirLen,
                     skipRepoHave, cmdGet, cmdTimeout)) {
                 // 在上面的方法里打了日志了，所以这里不再打一次
                 return false;
             }
         } else {
             if (skipRepoHave && RepoUtils.have(k, cmdGet, cmdTimeout)) {
-                LOG.info("skipRepoHave \t{}\tfile:///{}{}", tip, k, Suffix.GET_LOG);
+                LOG.info("skipRepoHave\tfile:///{}{}", k, Suffix.GET_LOG);
                 return true;
             }
             // 一般情况下不需要生成 pom 文件
@@ -82,7 +85,7 @@ public class DeployTask implements Runnable {
         cmd = v.toString();
         // 没有 jar 则判断是不是 pom 文件推送 pom
         if (!cmd.contains(MvnKey.JAR_PACKAGING_FILE)) {
-            if (!PackagingFromPom.read(tip, k, v)) {
+            if (!PackagingFromPom.read(k, v)) {
                 // 在上面的方法里打了日志了，所以这里不再打一次
                 return false;
             }
@@ -96,19 +99,19 @@ public class DeployTask implements Runnable {
             String failLog = MvnLog.failLog(logFile);
             if (notUpdatingSuccess && failLog != null && MvnLog.isNotUpdating(failLog)) {
                 // 可能有不规范的项目 RELEASE 包更新了内容，这里没更新所以为 warn
-                LOG.warn("end-deploy not updating success\t{}\tfile:///{}{}", tip, k, Suffix.DEPLOY_LOG);
+                LOG.warn("end-deploy not updating success\tfile:///{}{}", k, Suffix.DEPLOY_LOG);
                 return true;
             } else {
                 if (failLog != null) {
                     failLog = failLog.replace(": ", ":\n  ");
                 }
-                LOG.error("end-deploy error code: {}\t{}\tfile:///{}{}\n  {}",
-                        exitCode, tip, k, Suffix.DEPLOY_LOG, failLog);
+                LOG.error("end-deploy error code: {}\tfile:///{}{}\n  {}",
+                        exitCode, k, Suffix.DEPLOY_LOG, failLog);
                 return false;
             }
         } else {
             // 虽然没看的必要，但可以看进度，不会产生长期卡住的错觉
-            LOG.info("end-deploy success\t{}\tfile:///{}{}", tip, k, Suffix.DEPLOY_LOG);
+            LOG.info("end-deploy success\tfile:///{}{}", k, Suffix.DEPLOY_LOG);
             return true;
         }
     }

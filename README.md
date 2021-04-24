@@ -78,6 +78,9 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
   * 一个类中多个日志打印时需细分级别，\
     方便在日志配置文件中控制，\
     但是默认 warn 级别就不要输出对一般情况下没用的日志
+* 注意日志后面要粘贴到 Excel 用来分析的
+  * 在进程中配置了一个跟踪进度的`MDC`
+  * 格式统一`描述\t路径链接或详情`，因为链接处理不同所以不放进`MDC`
 
 
 ## 代码扫描 SonarCloud

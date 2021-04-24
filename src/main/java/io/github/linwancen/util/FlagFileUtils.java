@@ -27,10 +27,10 @@ public class FlagFileUtils {
                 return;
             }
             String dirSpaceName = PathUtils.dirSpaceName(PathUtils.canonicalPath(file));
-            LOG.warn("have not create file:///{}", dirSpaceName);
+            LOG.warn("have not create\tfile:///{}", dirSpaceName);
         } catch (IOException e) {
             String dirSpaceName = PathUtils.dirSpaceName(PathUtils.canonicalPath(file));
-            LOG.warn("Exception for create file:///{}", dirSpaceName, e);
+            LOG.warn("Exception for create\tfile:///{}", dirSpaceName, e);
         }
     }
 
@@ -40,7 +40,7 @@ public class FlagFileUtils {
                 Files.delete(file.toPath());
             } catch (IOException e) {
                 String dirSpaceName = PathUtils.dirSpaceName(PathUtils.canonicalPath(file));
-                LOG.warn("Files.delete IOException file:///{}", dirSpaceName, e);
+                LOG.warn("Files.delete IOException\tfile:///{}", dirSpaceName, e);
             }
         }
     }

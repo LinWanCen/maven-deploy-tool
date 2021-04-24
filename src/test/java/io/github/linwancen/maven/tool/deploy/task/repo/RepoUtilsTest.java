@@ -35,7 +35,7 @@ public class RepoUtilsTest {
                 "commons-cli", "commons-cli", "1.4");
         File file = new File(k);
         String path = PathUtils.canonicalPath(file);
-        LOG.info("file:///{}{}", path, Suffix.GET_LOG);
+        LOG.info("\tfile:///{}{}", path, Suffix.GET_LOG);
         assertTrue(b);
     }
 
@@ -46,7 +46,7 @@ public class RepoUtilsTest {
                 "commons-cli", "NotCommons-cli", "1.4");
         File file = new File(k);
         String path = PathUtils.canonicalPath(file);
-        LOG.info("file:///{}{}", path, Suffix.GET_LOG);
+        LOG.info("\tfile:///{}{}", path, Suffix.GET_LOG);
         assertFalse(b);
     }
 }

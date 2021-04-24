@@ -22,7 +22,7 @@ public class JsUtils {
         try {
             return Double.parseDouble(str);
         } catch (NumberFormatException e) {
-            LOG.error("parseDouble NumberFormatException: {}", str, e);
+            LOG.error("parseDouble NumberFormatException:\t{}", str, e);
             return null;
         }
     }
@@ -33,7 +33,7 @@ public class JsUtils {
         try {
             return engine.eval(js);
         } catch (ScriptException e) {
-            LOG.error("eval js ScriptException: {}", js, e);
+            LOG.error("eval js ScriptException:\t{}", js, e);
             return null;
         }
     }

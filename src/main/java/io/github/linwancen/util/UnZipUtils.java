@@ -62,7 +62,7 @@ public class UnZipUtils {
             }
         } catch (IOException e) {
             String path = PathUtils.canonicalPath(inFile);
-            LOG.error("ZipFile IOException, file:///{}", path, e);
+            LOG.error("ZipFile IOException\tfile:///{}", path, e);
             // 这里就不返回 null 了，避免使用的人没判空导致空指针
             return list;
         }
@@ -76,19 +76,19 @@ public class UnZipUtils {
             if (!unZipPath.startsWith(outPath)) {
                 // 解决：路径注入漏洞(path injection vulnerabilities)-压缩滑动漏洞(zip slip vulnerabilities)
                 // 防止任意文件访问 ../../../../../etc/password
-                LOG.error("Entry is outside of the target directory\n  unZipPath: {}\n  outPath: file:///{}",
+                LOG.error("Entry is outside of the target directory\n  unZipPath: {}\n  outPath:\tfile:///{}",
                         unZipPath, outPath);
                 return;
             }
         } catch (IOException e) {
-            LOG.error("outFile.getCanonicalPath IOException\n  outFile.getPath(): {}\n  outPath: file:///{}",
+            LOG.error("outFile.getCanonicalPath IOException\n  outFile.getPath(): {}\n  outPath:\tfile:///{}",
                     outFile.getPath(), outPath);
             return;
         }
         if (entry.isDirectory()) {
             if (!outFile.exists() && outFile.mkdirs()) {
                 String path = PathUtils.canonicalPath(outFile);
-                LOG.warn("unZipEntry mkdir fail, file:///{}", path);
+                LOG.warn("unZipEntry mkdir fail\tfile:///{}", path);
             }
             list.add(outFile);
             return;
@@ -105,7 +105,7 @@ public class UnZipUtils {
             list.add(outFile);
         } catch (IOException e) {
             String path = zipFile.getName().replace('\\', '/');
-            LOG.error("unZipEntry IOException file:///{}\n  {}", path, entry, e);
+            LOG.error("unZipEntry IOException\tfile:///{}\n  {}", path, entry, e);
         }
     }
 }

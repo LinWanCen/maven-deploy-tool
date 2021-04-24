@@ -27,7 +27,7 @@ public class UnZipUtilsTest {
         assertEquals(list.size(), 1);
         for (File file : list) {
             String path = PathUtils.canonicalPath(file);
-            LOG.info("testUnZip file:///{}", path);
+            LOG.info("testUnZip\tfile:///{}", path);
         }
     }
 
@@ -42,7 +42,7 @@ public class UnZipUtilsTest {
         assertEquals(list.size(), 2);
         for (File file : list) {
             String path = PathUtils.canonicalPath(file);
-            LOG.info("testUnZipPattern file:///{}", path);
+            LOG.info("testUnZipPattern\tfile:///{}", path);
         }
     }
 
@@ -57,7 +57,7 @@ public class UnZipUtilsTest {
         assertEquals(list.size(), 1);
         for (File file : list) {
             String path = PathUtils.canonicalPath(file);
-            LOG.info("testUnZipIE file:///{}", path);
+            LOG.info("testUnZipIE\tfile:///{}", path);
         }
     }
 }

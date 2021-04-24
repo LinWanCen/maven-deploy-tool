@@ -32,10 +32,10 @@ public class JStackUtils {
         try {
             Files.write(SCRIPT_FILE.toPath(), CMD.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            LOG.warn("genJStackScripts IOException file:///{}", SCRIPT_FILE_CANONICAL_PATH, e);
+            LOG.warn("genJStackScripts IOException\tfile:///{}", SCRIPT_FILE_CANONICAL_PATH, e);
         }
         if (!CmdUtils.IS_WINDOWS && SCRIPT_FILE.setExecutable(true, true)) {
-            LOG.warn("setExecutable fail file:///{}", SCRIPT_FILE_CANONICAL_PATH);
+            LOG.warn("setExecutable fail\tfile:///{}", SCRIPT_FILE_CANONICAL_PATH);
         }
     }
 

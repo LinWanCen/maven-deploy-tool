@@ -6,6 +6,7 @@ import io.github.linwancen.maven.tool.deploy.task.DeployTask;
 import io.github.linwancen.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.File;
 import java.util.Map;
@@ -23,7 +24,8 @@ public class Deploy {
     public static void run(Map<String, StringBuilder> paramMap, File deployDir) {
         int size = paramMap.size();
         String deployPath = PathUtils.canonicalPath(deployDir);
-        LOG.info("begin deploy:{} file:///{}", size, deployPath);
+        MDC.put(DeployTask.MDC_KEY_PROGRESS, String.valueOf(size));
+        LOG.info("begin deploy\tfile:///{}", deployPath);
 
         final CountDownLatch count = new CountDownLatch(size);
         final int deployDirLen = deployPath.length();
@@ -38,7 +40,7 @@ public class Deploy {
         Double calculate = JsUtils.calculate(EnvUtils.get("cmdTimeout", Conf.prop).replace("_", ""));
         if (calculate == null) {
             cmdTimeout = 1000 * 60 * 60 * 60;
-            LOG.warn("set cmdTimeout 1000 * 60 * 60 * 60 = {}", cmdTimeout);
+            LOG.warn("set default cmdTimeout\t1000 * 60 * 60 * 60 = {}", cmdTimeout);
         } else {
             cmdTimeout = calculate.intValue();
         }
@@ -49,13 +51,16 @@ public class Deploy {
         int index = 0;
         for (final Map.Entry<String, StringBuilder> entry : paramMap.entrySet()) {
             index++;
-            final String tip = index + "/" + size;
+            // 空格是为了避免粘贴到 Excel 中变成日期
+            final String progress = index + " / " + size;
             if (skipSuccess) {
                 String k = entry.getKey();
                 File successFile = new File(k + Suffix.DEPLOY + FlagFileUtils.SUCC_SUFFIX);
                 if (successFile.exists()) {
                     String dirSpaceName = PathUtils.dirSpaceName(k);
-                    LOG.info("end-deploy skip success\t{}\tfile:///{}", tip, dirSpaceName);
+                    try (MDC.MDCCloseable ignored = MDC.putCloseable(DeployTask.MDC_KEY_PROGRESS, progress)) {
+                        LOG.info("end-deploy skip success\tfile:///{}", dirSpaceName);
+                    }
                     count.countDown();
                     continue;
                 }
@@ -68,7 +73,7 @@ public class Deploy {
             task.deployDirLen = deployDirLen;
             task.cmdTimeout = cmdTimeout;
             // String
-            task.tip = tip;
+            task.progress = progress;
             task.cmdDeploy = cmdDeploy;
             task.cmdGet = cmdGet;
             // boolean
@@ -79,8 +84,9 @@ public class Deploy {
         }
         try {
             count.await();
+            MDC.put(DeployTask.MDC_KEY_PROGRESS, String.valueOf(size));
             // 这里的日志前缀没有横线跟 DeployTask 区分开来
-            LOG.info("end deploy:{} file:///{}", size, deployPath);
+            LOG.info("end deploy\tfile:///{}", deployPath);
         } catch (InterruptedException e) {
             LOG.error("count.await exception.", e);
             Thread.currentThread().interrupt();

@@ -23,15 +23,15 @@ public class ConfUtils {
         Properties prop = new Properties();
         String path = PathUtils.canonicalPath(file);
         if (!file.exists()) {
-            LOG.warn("not found prop file:///{}", path);
+            LOG.warn("not found prop\tfile:///{}", path);
             return prop;
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
             prop.load(br);
             int size = prop.size();
-            LOG.debug("load prop success, current size:{}, file:///{}", size, path);
+            LOG.debug("load prop success, current size:{}\tfile:///{}", size, path);
         } catch (Exception e) {
-            LOG.warn("load prop Exception, file:///{}", path, e);
+            LOG.warn("load prop Exception\tfile:///{}", path, e);
         }
         return prop;
     }

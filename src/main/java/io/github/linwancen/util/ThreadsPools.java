@@ -34,8 +34,8 @@ public class ThreadsPools {
         executor = new ScheduledThreadPoolExecutor(corePoolSize, threadFactory);
         poolMap.put(namingPattern, executor);
         // 虽然 JStackUtils.CMD 在当前进程固定，但是在没用到线程池时就不打印，打印是为了方便排查卡住原因
-        LOG.info("create threads pool, namingPattern: {}, corePoolSize: {}, {} script:{}",
-                namingPattern, corePoolSize, JStackUtils.JSTACK, JStackUtils.CMD);
+        LOG.info("create threads pool\tsize:{}, namingPattern: {}, {} script:\t{}",
+                corePoolSize, namingPattern, JStackUtils.JSTACK, JStackUtils.CMD);
         // 生成脚本方便不看日志执行
         JStackUtils.genJStackScripts();
         return executor;

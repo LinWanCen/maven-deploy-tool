@@ -24,7 +24,7 @@ class PomParser {
             document = reader.read(pomFile);
         } catch (Exception e) {
             String path = PathUtils.canonicalPath(pomFile);
-            LOG.error("parse pom.xml Exception file:///{}", path, e);
+            LOG.error("parse pom.xml Exception\tfile:///{}", path, e);
             return null;
         }
         return parse(document);

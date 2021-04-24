@@ -37,7 +37,7 @@ public class CmdUtils {
      * @return exitCode
      */
     public static int exec(String cmd, File workingDirectory, int timeout, File logFile) {
-        LOG.info("executing command: {}", cmd);
+        LOG.info("executing command\t{}", cmd);
 
         Executor executor = new DefaultExecutor();
 
@@ -51,7 +51,9 @@ public class CmdUtils {
             executor.setWorkingDirectory(workingDirectory);
         }
         if (LOG.isDebugEnabled()) {
-            LOG.debug("workdir: {}", executor.getWorkingDirectory().getAbsolutePath());
+            File file = executor.getWorkingDirectory();
+            String path = PathUtils.canonicalPath(file);
+            LOG.debug("workdir\tfile:///{}", path);
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -68,7 +70,7 @@ public class CmdUtils {
                 executor.execute(CommandLine.parse(cmd), resultHandler);
             }
         } catch (IOException e) {
-            LOG.error("execute IOException, cmd: {} ", cmd, e);
+            LOG.error("execute IOException, cmd:\t{} ", cmd, e);
             return 1;
         }
 
@@ -76,7 +78,7 @@ public class CmdUtils {
             resultHandler.waitFor();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.error("waitFor InterruptedException, cmd: {}", cmd, e);
+            LOG.error("waitFor InterruptedException, cmd:\t{}", cmd, e);
             return 1;
         }
 
@@ -95,12 +97,12 @@ public class CmdUtils {
             }
         } catch (IOException e) {
             String path = PathUtils.canonicalPath(logFile);
-            LOG.error("write logFile IOException file:///{}", path, e);
+            LOG.error("write logFile IOException\tfile:///{}", path, e);
         }
 
         // 异常的情况下才检查 超时进程被看门狗杀死
         if (exitCode != 0 && executor.getWatchdog().killedProcess()) {
-            LOG.error("execute timeout: {}, cmd: {}", timeout, cmd);
+            LOG.error("execute timeout: {}, cmd:\t{}", timeout, cmd);
         }
         return exitCode;
     }

@@ -17,7 +17,7 @@ class PackagingFromPom {
     /**
      * 不支持其他类型文件推送，没有 jar 默认 pom 文件
      */
-    static boolean read(String tip, String k, StringBuilder v) {
+    static boolean read(String k, StringBuilder v) {
         String line;
         boolean havePackaging = false;
         File pomFile = new File(k + Suffix.POM);
@@ -30,15 +30,15 @@ class PackagingFromPom {
             }
         } catch (IOException e) {
             String path = PathUtils.canonicalPath(pomFile);
-            LOG.warn("getPackagingFromPom IOException \t{}\tfile:///{}", tip, path, e);
+            LOG.warn("getPackagingFromPom IOException\tfile:///{}", path, e);
             return false;
         }
         String dirSpaceName = PathUtils.dirSpaceName(k);
         if (!havePackaging) {
-            LOG.error("not found jar, packaging is not pom\t{}\tfile:///{}", tip, dirSpaceName);
+            LOG.error("not found jar, packaging is not pom\tfile:///{}", dirSpaceName);
             return false;
         }
-        LOG.info("not found jar, set packaging=pom\t{}\tfile:///{}.pom", tip, dirSpaceName);
+        LOG.info("not found jar, set packaging=pom\tfile:///{}.pom", dirSpaceName);
         v.append(MvnKey.POM_PACKAGING_FILE).append(k).append(Suffix.POM);
         return true;
     }

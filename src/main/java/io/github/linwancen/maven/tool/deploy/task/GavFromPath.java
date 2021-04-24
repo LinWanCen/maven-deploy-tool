@@ -19,25 +19,25 @@ class GavFromPath {
      * <br/>需要保证文件路径的准确，一般用在本地仓库直接推送，复制过来的文件不行
      * <br/>这种情况下如果 jar 有依赖会丢失
      */
-    static boolean split(String tip, String k, StringBuilder v,
+    static boolean split(String k, StringBuilder v,
                          int deployDirLen,
                          boolean skipRepoHave, String cmdGet, int cmdTimeout) {
         String dirSpaceName = PathUtils.dirSpaceName(k);
-        LOG.warn("not found pom in jar, get pom from path, would lost dependencies\t{}\tfile:///{}", tip, dirSpaceName);
+        LOG.warn("get pom from path\tfile:///{}\tbecause not found pom in jar, would lost dependencies", dirSpaceName);
         String version;
         String artifactId;
         String groupId;
         try {
             int dirFileIndex = k.lastIndexOf("/");
             if (dirFileIndex <= deployDirLen) {
-                LOG.error("k.lastIndexOf(\"/\") = {} <= deployDirLen: {}, k={}",
+                LOG.error("\tk.lastIndexOf(\"/\") = {} <= deployDirLen: {}, k={}",
                         dirFileIndex, deployDirLen, k);
                 return false;
             }
             String gavPath = k.substring(deployDirLen, dirFileIndex);
             int avIndex = gavPath.lastIndexOf("/");
             if (avIndex <= 0) {
-                LOG.error("gavPath.lastIndexOf(\"/\") = {}, gavPath={}", avIndex, gavPath);
+                LOG.error("\tgavPath.lastIndexOf(\"/\") = {}, gavPath={}", avIndex, gavPath);
                 return false;
             }
 
@@ -46,7 +46,7 @@ class GavFromPath {
             String gaPath = gavPath.substring(0, avIndex);
             int gaIndex = gaPath.lastIndexOf("/");
             if (gaIndex <= 0) {
-                LOG.error("gaPath.lastIndexOf(\"/\") = {}, gaPath={}", gaIndex, gaPath);
+                LOG.error("\tgaPath.lastIndexOf(\"/\") = {}, gaPath={}", gaIndex, gaPath);
                 return false;
             }
 
@@ -54,13 +54,13 @@ class GavFromPath {
 
             groupId = gaPath.substring(1, gaIndex).replace('/', '.');
         } catch (Exception e) {
-            LOG.info("getGavFromPath Exception \t{}\tfile:///{}.pom", tip, dirSpaceName, e);
+            LOG.info("getGavFromPath Exception\tfile:///{}.pom", dirSpaceName, e);
             return false;
         }
-        LOG.warn("getGavFromPath: {}:{}:{}", groupId, artifactId, version);
+        LOG.warn("getGavFromPath\t{}:{}:{}", groupId, artifactId, version);
         if (skipRepoHave && RepoUtils.haveGav(k, cmdGet, cmdTimeout,
                 groupId, artifactId, version)) {
-            LOG.info("skipRepoHave \t{}\tfile:///{}{}", tip, k, Suffix.GET_LOG);
+            LOG.info("skipRepoHave\tfile:///{}{}", k, Suffix.GET_LOG);
             return false;
         }
         v.append(MvnKey.GROUP_ID).append(groupId);

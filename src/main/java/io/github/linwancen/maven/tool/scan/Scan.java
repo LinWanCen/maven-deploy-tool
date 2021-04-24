@@ -24,7 +24,7 @@ public class Scan {
         int skipSize;
         if (calculate == null) {
             skipSize = 1024 * 1024 * 50;
-            LOG.warn("not set skipSize, set default 1024 * 1024 * 50 = {}", skipSize);
+            LOG.warn("set default skipSize\t1024 * 1024 * 50 = {}", skipSize);
         } else {
             skipSize = calculate.intValue();
         }
