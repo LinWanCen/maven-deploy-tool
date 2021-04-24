@@ -2,6 +2,7 @@ package io.github.linwancen.maven.tool;
 
 public class MvnKey {
 
+    public static final String ARTIFACT = " -D artifact=";
     public static final String GROUP_ID = " -D groupId=";
     public static final String ARTIFACT_ID = " -D artifactId=";
     public static final String VERSION = " -D version=";

@@ -11,8 +11,17 @@ public class CmdPrefix {
 
     private CmdPrefix() {}
 
-    static String get() {
-        StringBuilder cmdBuilder = new StringBuilder(EnvUtils.get("cmdPrefix", Conf.prop));
+    static String deploy() {
+        return repoConf("cmdDeploy", "mvn deploy:deploy-file");
+    }
+
+    public static String get() {
+        String repoConf = repoConf("cmdGet", "mvn dependency:get");
+        return repoConf + MvnKey.ARTIFACT;
+    }
+
+    private static String repoConf(String key, String defaultValue) {
+        StringBuilder cmdBuilder = new StringBuilder(EnvUtils.get(key, Conf.prop, defaultValue));
         String userSettings = EnvUtils.get("userSettings", Conf.prop);
         if (userSettings != null) {
             cmdBuilder.append(MvnKey.SETTINGS).append(userSettings);

@@ -21,7 +21,7 @@ class GavFromPath {
      */
     static boolean split(String tip, String k, StringBuilder v,
                          int deployDirLen,
-                         boolean skipRepoHave, int cmdTimeout) {
+                         boolean skipRepoHave, String cmdGet, int cmdTimeout) {
         String dirSpaceName = PathUtils.dirSpaceName(k);
         LOG.warn("not found pom in jar, get pom from path, would lost dependencies\t{}\tfile:///{}", tip, dirSpaceName);
         String version;
@@ -58,7 +58,7 @@ class GavFromPath {
             return false;
         }
         LOG.warn("getGavFromPath: {}:{}:{}", groupId, artifactId, version);
-        if (skipRepoHave && RepoUtils.haveGav(k, cmdTimeout,
+        if (skipRepoHave && RepoUtils.haveGav(k, cmdGet, cmdTimeout,
                 groupId, artifactId, version)) {
             LOG.info("skipRepoHave \t{}\tfile:///{}{}", tip, k, Suffix.GET_LOG);
             return false;

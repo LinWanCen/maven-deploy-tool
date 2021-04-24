@@ -43,7 +43,8 @@ public class Deploy {
             cmdTimeout = calculate.intValue();
         }
 
-        String cmdPrefix = CmdPrefix.get();
+        String cmdDeploy = CmdPrefix.deploy();
+        String cmdGet = CmdPrefix.get();
 
         int index = 0;
         for (final Map.Entry<String, StringBuilder> entry : paramMap.entrySet()) {
@@ -68,7 +69,8 @@ public class Deploy {
             task.cmdTimeout = cmdTimeout;
             // String
             task.tip = tip;
-            task.cmdPrefix = cmdPrefix;
+            task.cmdDeploy = cmdDeploy;
+            task.cmdGet = cmdGet;
             // boolean
             task.getGavFromPath = getGavFromPath;
             task.skipRepoHave = skipRepoHave;

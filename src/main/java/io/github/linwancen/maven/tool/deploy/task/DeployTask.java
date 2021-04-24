@@ -22,7 +22,8 @@ public class DeployTask implements Runnable {
     public int deployDirLen;
     public int cmdTimeout;
     public String tip;
-    public String cmdPrefix;
+    public String cmdDeploy;
+    public String cmdGet;
     public boolean getGavFromPath;
     public boolean notUpdatingSuccess;
     public boolean skipRepoHave;
@@ -45,7 +46,7 @@ public class DeployTask implements Runnable {
     private boolean deploy() {
         String k = entry.getKey();
         StringBuilder v = entry.getValue();
-        v.insert(0, cmdPrefix);
+        v.insert(0, cmdDeploy);
         String cmd = v.toString();
         // 没有 pom 文件就在 jar 解压出来
         if (!cmd.contains(MvnKey.POM_FILE)) {
@@ -66,12 +67,12 @@ public class DeployTask implements Runnable {
                 return false;
             }
             if (!GavFromPath.split(tip, k, v, deployDirLen,
-                    skipRepoHave, cmdTimeout)) {
+                    skipRepoHave, cmdGet, cmdTimeout)) {
                 // 在上面的方法里打了日志了，所以这里不再打一次
                 return false;
             }
         } else {
-            if (skipRepoHave && RepoUtils.have(k, cmdTimeout)) {
+            if (skipRepoHave && RepoUtils.have(k, cmdGet, cmdTimeout)) {
                 LOG.info("skipRepoHave \t{}\tfile:///{}{}", tip, k, Suffix.GET_LOG);
                 return true;
             }
