@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 public class FlagFileUtils {
 
@@ -18,10 +17,10 @@ public class FlagFileUtils {
 
     public static void update(String pathPrefix, String suffix, String... deleteSuffixes) {
         for (String s : deleteSuffixes) {
-            deleteFile(new File(pathPrefix + s));
+            PathUtils.deleteFile(new File(pathPrefix + s));
         }
         File file = new File(pathPrefix + suffix);
-        deleteFile(file);
+        PathUtils.deleteFile(file);
         try {
             if (file.createNewFile()) {
                 return;
@@ -31,17 +30,6 @@ public class FlagFileUtils {
         } catch (IOException e) {
             String dirSpaceName = PathUtils.dirSpaceName(PathUtils.canonicalPath(file));
             LOG.warn("Exception for create\tfile:///{}", dirSpaceName, e);
-        }
-    }
-
-    public static void deleteFile(File file) {
-        if (file.exists()) {
-            try {
-                Files.delete(file.toPath());
-            } catch (IOException e) {
-                String dirSpaceName = PathUtils.dirSpaceName(PathUtils.canonicalPath(file));
-                LOG.warn("Files.delete IOException\tfile:///{}", dirSpaceName, e);
-            }
         }
     }
 }

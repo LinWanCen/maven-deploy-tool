@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class PathUtils {
 
@@ -39,5 +40,14 @@ public class PathUtils {
         String dir = dirFile.substring(0, nameIndex);
         String name = dirFile.substring(nameIndex);
         return dir + " " + name;
+    }
+
+    public static void deleteFile(File file) {
+        try {
+            Files.deleteIfExists(file.toPath());
+        } catch (IOException e) {
+            String dirSpaceName = PathUtils.dirSpaceName(PathUtils.canonicalPath(file));
+            LOG.warn("Files.delete IOException\tfile:///{}", dirSpaceName, e);
+        }
     }
 }

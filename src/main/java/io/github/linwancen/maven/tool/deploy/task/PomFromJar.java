@@ -23,7 +23,6 @@ public class PomFromJar {
         // 避免 jar 在同一个目录的情况下相互覆盖并导致其他的移动失败
         // 解压的时候会创建文件夹这里就不创建了
         File dir = new File(k);
-        PathUtils.mkdir(dir);
         // 解压 jar 里的所有 pom 文件
         List<File> list = UnZipUtils.unZip(file, dir,
                 Pattern.compile("pom.xml"), null);
@@ -61,10 +60,11 @@ public class PomFromJar {
         }
         String pomPath = k + Suffix.POM;
         if (!pomFile.renameTo(new File(pomPath))) {
+            // 不把移动失败的路径写进去，避免移动失败后报找不到文件异常
             LOG.warn("move pom fail\tfile:///{}", dirSpaceName);
-            // 避免移动失败后报找不到文件异常
-            return;
+        } else {
+            v.append(MvnKey.POM_FILE).append(pomPath);
         }
-        v.append(MvnKey.POM_FILE).append(pomPath);
+        // 删除多余的文件夹
     }
 }

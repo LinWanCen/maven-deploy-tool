@@ -20,6 +20,12 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
   多用于标准的本地仓库
 
 
+### 非 Maven Web 项目上传
+
+- jar 在 tomcat/webapps/${youApp}/WEB-INF/lib
+- 多个微服务建议先把文件都拷贝到某个文件夹中，避免同名 jar 重复判断是否要跳过
+
+
 ## 已完成 DONE
 
 - (可设置) 跳过成功
@@ -43,9 +49,12 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
 - 配置文件支持 UTF-8
 - 配置项支持命令行`-D key=value`，\
   优先级：命令行 > 环境变量 > 配置文件
+
+
 - 成功失败在包目录中创建`.deploy.succ/fail`标识
 - 获取到本地日志写入包目录`.get.log`
 - 上传到远程日志写入包目录`.deploy.log`
+- 附带删除脚本
 
 
 * (可设置) 根据 CPU 核心数的倍数多线程运行 (支持小数)
@@ -59,6 +68,8 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
 
 ## 未完成 TODO
 
+- 找不到 pom 文件时自动从 jar 中解压生成的临时文件夹自动删除
+- 集成删除生成的文件功能
 - GavFromPath 支持 classifier
 - 跳过远程仓库已有的包实现方式升级：\
   在有 Nexus 索引的情况下使用索引而不是 get 包
@@ -67,6 +78,11 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
 
 
 ## 贡献代码注意 NOTE
+
+- 提交前务必执行
+  - 分享的 Main
+  - "package zip"/`mvn verify`，单元测试可以检查难以发现的 bug
+- 需要思考逻辑的地方添加单元测试，用于检查不能直接看出来的问题
 
 * 代码拆分成多个文件
 * 注意日志级别

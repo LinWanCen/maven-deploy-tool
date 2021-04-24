@@ -77,6 +77,16 @@
   <build>
     <finalName>${project.artifactId}</finalName>
 
+    <!-- 覆盖参数没设 true 的情况下，后面的不覆盖前面的，即前面的优先级高 -->
+    <testResources>
+      <testResource>
+        <directory>${project.basedir}/src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>${project.basedir}/src/main/resources</directory>
+      </testResource>
+    </testResources>
+
     <plugins>
 
       <!-- 拷贝 dependencies 的依赖到 lib 目录 -->
@@ -143,6 +153,7 @@
               <target>
                 <copy todir="${project.build.directory}/" overwrite="true">
                   <fileset dir="${basedir}/src/main/resources"/>
+                  <fileset dir="${project.build.scriptSourceDirectory}"/>
                 </copy>
                 <zip destfile="${project.build.directory}/${project.artifactId}.zip">
                   <fileset dir="${project.basedir}/">
@@ -150,6 +161,7 @@
                   </fileset>
                   <fileset dir="${project.build.directory}/">
                     <include name="lib/"/>
+                    <include name="*.sh"/>
                     <include name="*.xml"/>
                     <include name="*.properties"/>
                     <include name="${project.artifactId}.jar"/>
