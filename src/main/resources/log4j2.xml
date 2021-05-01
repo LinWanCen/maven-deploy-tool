@@ -25,24 +25,6 @@
       <PatternLayout pattern="${linkPattern}" charset="UTF-8"/>
     </Console>
 
-    <RollingRandomAccessFile name="app" fileName="${baseDir}/app.log" filePattern="${prefix}/app/app.${suffix}">
-      <PatternLayout>
-        <Pattern>${pattern}</Pattern>
-        <Charset>UTF-8</Charset>
-      </PatternLayout>
-      <Policies>
-        <OnStartupTriggeringPolicy/>
-        <TimeBasedTriggeringPolicy/>
-        <SizeBasedTriggeringPolicy size="10 MB"/>
-      </Policies>
-      <DefaultRolloverStrategy max="20">
-        <Delete basePath="${baseDir}" maxDepth="4">
-          <IfFileName glob="**/app.*.log.gz"/>
-          <IfLastModified age="200d"/>
-        </Delete>
-      </DefaultRolloverStrategy>
-    </RollingRandomAccessFile>
-
     <RollingRandomAccessFile name="root" fileName="${baseDir}/root.log" filePattern="${prefix}/root/root.${suffix}">
       <PatternLayout>
         <Pattern>${pattern}</Pattern>
@@ -73,11 +55,6 @@
     <!-- debug 打印工作目录 -->
     <!-- trace 打印命令执行日志 -->
     <AsyncLogger name="io.github.linwancen.util.CmdUtils" level="warn"/>
-
-    <AsyncLogger name="io.github.linwancen" level="info" additivity="false" includeLocation="true">
-      <AppenderRef ref="LinkConsole"/>
-      <AppenderRef ref="app"/>
-    </AsyncLogger>
 
     <AsyncRoot level="info" includeLocation="true">
       <AppenderRef ref="LinkConsole"/>
