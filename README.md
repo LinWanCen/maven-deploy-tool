@@ -68,6 +68,7 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
 
 ## 未完成 TODO
 
+- 推送成功转移目录，便于失败的再次尝试
 - 找不到 pom 文件时自动从 jar 中解压生成的临时文件夹自动删除
 - 集成删除生成的文件功能
 - GavFromPath 支持 classifier
