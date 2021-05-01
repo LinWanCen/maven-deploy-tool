@@ -47,7 +47,7 @@ public class UnZipUtilsTest {
     }
 
     @Test
-    public void testUnZipIE() {
+    public void testUnZipInclusionExclusion() {
         List<File> list = UnZipUtils.unZip(
                 new File(TEST_CLASS_PATH, "test.jar"),
                 new File(TEST_CLASS_PATH),
@@ -57,7 +57,7 @@ public class UnZipUtilsTest {
         assertEquals(list.size(), 1);
         for (File file : list) {
             String path = PathUtils.canonicalPath(file);
-            LOG.info("testUnZipIE\tfile:///{}", path);
+            LOG.info("testUnZipInclusionExclusion\tfile:///{}", path);
         }
     }
 }
