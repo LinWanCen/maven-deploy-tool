@@ -7,7 +7,9 @@
 - (一次) 修改 conf.properties 文件
 - 在 IDE 中运行 Main 或者执行 jar 
 
-参考（url 也可以在 conf.properties）：
+可以在 conf.properties 设置 url 后双击`start.bat`
+
+- 或者参考命令：
 ```shell
 java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
 ```

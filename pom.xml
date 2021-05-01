@@ -162,6 +162,7 @@
                   <fileset dir="${project.build.directory}/">
                     <include name="lib/"/>
                     <include name="*.sh"/>
+                    <include name="*.bat"/>
                     <include name="*.xml"/>
                     <include name="*.properties"/>
                     <include name="${project.artifactId}.jar"/>
