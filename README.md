@@ -82,8 +82,10 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
 
 - 提交前务必执行
   - 分享的 Main
-  - "package zip"/`mvn verify`，单元测试可以检查难以发现的 bug
-- 需要思考逻辑的地方添加单元测试，用于检查不能直接看出来的问题
+  - 分享的 "package zip" 或者 `mvn verify`，\
+    单元测试可以检查难以发现的 bug
+- 需要思考逻辑的地方添加单元测试，\
+  用于检查不能直接看出来的问题
 
 * 代码拆分成多个文件
 * 注意日志级别
@@ -97,7 +99,8 @@ java -jar maven-deploy-tool.jar -D url=file:///D:/MAVEN_REPO/deploy_local
     但是默认 warn 级别就不要输出对一般情况下没用的日志
 * 注意日志后面要粘贴到 Excel 用来分析的
   * 在进程中配置了一个跟踪进度的`MDC`
-  * 格式统一`描述\t路径链接或详情`，因为链接处理不同所以不放进`MDC`
+  * 格式统一`描述\t路径链接或详情`，\
+    因为链接处理不同所以不放进`MDC`
 
 
 ## 代码扫描 SonarCloud
