@@ -8,12 +8,12 @@ import java.util.LinkedHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-public class ThreadsPools {
+public class ThreadPools {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ThreadsPools.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ThreadPools.class);
     private static final LinkedHashMap<String, ScheduledExecutorService> poolMap = new LinkedHashMap<>();
 
-    private ThreadsPools() {}
+    private ThreadPools() {}
 
     /**
      * 获取指定名字和核心倍数的定时线程池

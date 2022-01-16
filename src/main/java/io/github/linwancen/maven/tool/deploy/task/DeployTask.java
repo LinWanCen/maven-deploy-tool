@@ -20,7 +20,7 @@ public class DeployTask implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeployTask.class);
 
-    public CountDownLatch count;
+    public CountDownLatch latch;
     public Map.Entry<String, StringBuilder> entry;
     public int deployDirLen;
     public int cmdTimeout;
@@ -42,7 +42,7 @@ public class DeployTask implements Runnable {
             }
         } finally {
             // 在 finally 中 countDown 避免异常等情况导致没有执行而卡住主线程
-            count.countDown();
+            latch.countDown();
         }
     }
 

@@ -27,7 +27,7 @@ public class Deploy {
         MDC.put(DeployTask.MDC_KEY_PROGRESS, String.valueOf(size));
         LOG.info("begin deploy\tfile:///{}", deployPath);
 
-        final CountDownLatch count = new CountDownLatch(size);
+        final CountDownLatch latch = new CountDownLatch(size);
         final int deployDirLen = deployPath.length();
         // 在方法中获取而不是成员变量中获取以便支持重设
         final boolean getGavFromPath = "true".equals(EnvUtils.get("getGavFromPath", Conf.prop));
@@ -60,14 +60,15 @@ public class Deploy {
                     String dirSpaceName = PathUtils.dirSpaceName(k);
                     try (MDC.MDCCloseable ignored = MDC.putCloseable(DeployTask.MDC_KEY_PROGRESS, progress)) {
                         LOG.info("end-deploy skip success\tfile:///{}", dirSpaceName);
+                    } finally {
+                        latch.countDown();
                     }
-                    count.countDown();
                     continue;
                 }
             }
             // 不在构方法中避免添加字段时需要频繁修改构造方法
             DeployTask task = new DeployTask();
-            task.count = count;
+            task.latch = latch;
             task.entry = entry;
             // int
             task.deployDirLen = deployDirLen;
@@ -80,10 +81,10 @@ public class Deploy {
             task.getGavFromPath = getGavFromPath;
             task.skipRepoHave = skipRepoHave;
             task.notUpdatingSuccess = notUpdatingSuccess;
-            ThreadsPools.get("deploy-%d", threadMultiplier).execute(task);
+            ThreadPools.get("deploy-%d", threadMultiplier).execute(task);
         }
         try {
-            count.await();
+            latch.await();
             MDC.put(DeployTask.MDC_KEY_PROGRESS, String.valueOf(size));
             // 这里的日志前缀没有横线跟 DeployTask 区分开来
             LOG.info("end deploy\tfile:///{}", deployPath);
