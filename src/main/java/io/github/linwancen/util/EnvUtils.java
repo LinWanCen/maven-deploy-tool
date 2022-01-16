@@ -35,7 +35,10 @@ public class EnvUtils {
             return env;
         }
         if (prop != null) {
-            return prop.getProperty(key);
+            String value = prop.getProperty(key);
+            if (value != null) {
+                return value;
+            }
         }
         return defaultValue;
     }
